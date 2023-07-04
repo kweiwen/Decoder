@@ -9,19 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include <math.h>
-#define _USE_MATH_DEFINES
-
-struct decoder
-{
-    float factor;
-    float C;
-    float S;
-    juce::IIRFilter smoother;
-};
-
-void process(decoder &self, float L, float R);
-void update_coeffs(decoder& self, float fc, float sr);
+#include "decoder.h"
 
 //==============================================================================
 /**
