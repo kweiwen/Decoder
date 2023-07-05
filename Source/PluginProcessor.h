@@ -10,10 +10,8 @@
 
 #include <JuceHeader.h>
 #include "decoder.h"
+#include "IIRFilter.h"
 
-//==============================================================================
-/**
-*/
 class DecoderAudioProcessor  : public juce::AudioProcessor
                             #if JucePlugin_Enable_ARA
                              , public juce::AudioProcessorARAExtension
@@ -58,11 +56,40 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
-    decoder instance;
+    decoder inst0;
+    decoder inst1;
+    decoder inst2;
+    decoder inst3;
+    decoder inst4;
+    decoder inst5;
 
-    juce::AudioParameterFloat* level1;
-    juce::AudioParameterFloat* level2;
-    juce::AudioParameterFloat* fc;
+    juce::AudioParameterFloat* center0; juce::AudioParameterFloat* surround0; 
+    juce::AudioParameterFloat* center1; juce::AudioParameterFloat* surround1; 
+    juce::AudioParameterFloat* center2; juce::AudioParameterFloat* surround2; 
+    juce::AudioParameterFloat* center3; juce::AudioParameterFloat* surround3; 
+    juce::AudioParameterFloat* center4; juce::AudioParameterFloat* surround4; 
+    juce::AudioParameterFloat* center5; juce::AudioParameterFloat* surround5; 
+
+    juce::AudioParameterFloat* fc0;
+    juce::AudioParameterFloat* fc1;
+    juce::AudioParameterFloat* fc2;
+    juce::AudioParameterFloat* fc3;
+    juce::AudioParameterFloat* fc4;
+    juce::AudioParameterFloat* fc5;
+
+    juce::AudioParameterFloat* bl0;
+    juce::AudioParameterFloat* bl1;
+    juce::AudioParameterFloat* bl2;
+    juce::AudioParameterFloat* bl3;
+    juce::AudioParameterFloat* bl4;
+    juce::AudioParameterFloat* bl5;
+
+    std::vector<std::unique_ptr<IIRFilter>> B0;
+    std::vector<std::unique_ptr<IIRFilter>> B1;
+    std::vector<std::unique_ptr<IIRFilter>> B2;
+    std::vector<std::unique_ptr<IIRFilter>> B3;
+    std::vector<std::unique_ptr<IIRFilter>> B4;
+    std::vector<std::unique_ptr<IIRFilter>> B5;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DecoderAudioProcessor)
 };
