@@ -22,12 +22,12 @@ DecoderAudioProcessor::DecoderAudioProcessor()
                        )
 #endif
 {
-    addParameter(chL = new juce::AudioParameterFloat("chL", "chL", 0.00f, 1.00f, 0.50f));
-    addParameter(chR = new juce::AudioParameterFloat("chR", "chR", 0.00f, 1.00f, 0.50f));
-    addParameter(chLC = new juce::AudioParameterFloat("chLC", "chLC", 0.00f, 1.00f, 0.50f));
-    addParameter(chRC = new juce::AudioParameterFloat("chRC", "chRC", 0.00f, 1.00f, 0.50f));
-    addParameter(chLS = new juce::AudioParameterFloat("chLS", "chLS", 0.00f, 1.00f, 1.00f));
-    addParameter(chRS = new juce::AudioParameterFloat("chRS", "chRS", 0.00f, 1.00f, 1.00f));
+    addParameter(chL = new juce::AudioParameterFloat("chL", "chL", 0.00f, 2.00f, 0.50f));
+    addParameter(chR = new juce::AudioParameterFloat("chR", "chR", 0.00f, 2.00f, 0.50f));
+    addParameter(chLC = new juce::AudioParameterFloat("chLC", "chLC", 0.00f, 2.00f, 0.50f));
+    addParameter(chRC = new juce::AudioParameterFloat("chRC", "chRC", 0.00f, 2.00f, 0.50f));
+    addParameter(chLS = new juce::AudioParameterFloat("chLS", "chLS", 0.00f, 2.00f, 2.00f));
+    addParameter(chRS = new juce::AudioParameterFloat("chRS", "chRS", 0.00f, 2.00f, 2.00f));
     addParameter(chC = new juce::AudioParameterFloat("chC", "chC", 0.00f, 1.00f, 0.50f));
     addParameter(fc0 = new juce::AudioParameterFloat("fc0", "fc0", 0.01f, 120.0f, 30.00f));
     addParameter(fc1 = new juce::AudioParameterFloat("fc1", "fc1", 0.01f, 120.0f, 30.00f));
@@ -264,11 +264,11 @@ void DecoderAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
         
         outputL[i] = inputL[i] * chL->get();
         outputR[i] = inputR[i] * chR->get();
-        outputC[i] = (inst0.C + inst1.C + inst2.C + inst3.C + inst4.C) * chC->get();
-        outputLC[i] = (inst0.LC + inst1.LC + inst2.LC + inst3.LC + inst4.LC) * chLC->get();
-        outputRC[i] = (inst0.RC + inst1.RC + inst2.RC + inst3.RC + inst4.RC) * chRC->get();
-        outputLS[i] = (inst0.LS + inst1.LS + inst2.LS + inst3.LS + inst4.LS) * chLS->get();
-        outputRS[i] = (inst0.RS + inst1.RS + inst2.RS + inst3.RS + inst4.RS) * chRS->get();
+        outputC[i] = (inst0.C + inst1.C + inst2.C + inst3.C + inst4.C + inst5.C) * chC->get();
+        outputLC[i] = (inst0.LC + inst1.LC + inst2.LC + inst3.LC + inst4.LC + inst5.LC) * chLC->get();
+        outputRC[i] = (inst0.RC + inst1.RC + inst2.RC + inst3.RC + inst4.RC + inst5.RC) * chRC->get();
+        outputLS[i] = (inst0.LS + inst1.LS + inst2.LS + inst3.LS + inst4.LS + inst5.LS) * chLS->get();
+        outputRS[i] = (inst0.RS + inst1.RS + inst2.RS + inst3.RS + inst4.RS + inst5.RS) * chRS->get();
 
     }
 }
