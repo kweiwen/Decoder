@@ -17,35 +17,30 @@ DecoderAudioProcessor::DecoderAudioProcessor()
                       #if ! JucePlugin_IsSynth
                        .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
                       #endif
-                       .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
+                       .withOutput ("Output", juce::AudioChannelSet::create7point0(), true)
                      #endif
                        )
 #endif
 {
-    addParameter(center0 = new juce::AudioParameterFloat("center0", "center0", 0.00f, 1.00f, 0.50f));
-    addParameter(center1 = new juce::AudioParameterFloat("center1", "center1", 0.00f, 1.00f, 0.50f));
-    addParameter(center2 = new juce::AudioParameterFloat("center2", "center2", 0.00f, 1.00f, 0.50f));
-    addParameter(center3 = new juce::AudioParameterFloat("center3", "center3", 0.00f, 1.00f, 0.50f));
-    addParameter(center4 = new juce::AudioParameterFloat("center4", "center4", 0.00f, 1.00f, 0.50f));
-    addParameter(center5 = new juce::AudioParameterFloat("center5", "center5", 0.00f, 1.00f, 0.50f));
-    addParameter(surround0 = new juce::AudioParameterFloat("surround0", "surround0", 0.00f, 1.00f, 0.50f));
-    addParameter(surround1 = new juce::AudioParameterFloat("surround1", "surround1", 0.00f, 1.00f, 0.50f));
-    addParameter(surround2 = new juce::AudioParameterFloat("surround2", "surround2", 0.00f, 1.00f, 0.50f));
-    addParameter(surround3 = new juce::AudioParameterFloat("surround3", "surround3", 0.00f, 1.00f, 0.50f));
-    addParameter(surround4 = new juce::AudioParameterFloat("surround4", "surround4", 0.00f, 1.00f, 0.50f));
-    addParameter(surround5 = new juce::AudioParameterFloat("surround5", "surround5", 0.00f, 1.00f, 0.50f));
-    addParameter(fc0 = new juce::AudioParameterFloat("fc0", "fc0", 0.01f, 60.0f, 5.00f));
-    addParameter(fc1 = new juce::AudioParameterFloat("fc1", "fc1", 0.01f, 60.0f, 5.00f));
-    addParameter(fc2 = new juce::AudioParameterFloat("fc2", "fc2", 0.01f, 60.0f, 5.00f));
-    addParameter(fc3 = new juce::AudioParameterFloat("fc3", "fc3", 0.01f, 60.0f, 5.00f));
-    addParameter(fc4 = new juce::AudioParameterFloat("fc4", "fc4", 0.01f, 60.0f, 5.00f));
-    addParameter(fc5 = new juce::AudioParameterFloat("fc5", "fc5", 0.01f, 60.0f, 5.00f));
-    addParameter(bl0 = new juce::AudioParameterFloat("bl0", "bl0", 0.01f, 2.0f, 1.00f));
-    addParameter(bl1 = new juce::AudioParameterFloat("bl1", "bl1", 0.01f, 2.0f, 1.00f));
-    addParameter(bl2 = new juce::AudioParameterFloat("bl2", "bl2", 0.01f, 2.0f, 1.00f));
-    addParameter(bl3 = new juce::AudioParameterFloat("bl3", "bl3", 0.01f, 2.0f, 1.00f));
-    addParameter(bl4 = new juce::AudioParameterFloat("bl4", "bl4", 0.01f, 2.0f, 1.00f));
-    addParameter(bl5 = new juce::AudioParameterFloat("bl5", "bl5",  0.01f, 2.0f,  1.00f));
+    addParameter(chL = new juce::AudioParameterFloat("chL", "chL", 0.00f, 1.00f, 0.50f));
+    addParameter(chR = new juce::AudioParameterFloat("chR", "chR", 0.00f, 1.00f, 0.50f));
+    addParameter(chLC = new juce::AudioParameterFloat("chLC", "chLC", 0.00f, 1.00f, 0.50f));
+    addParameter(chRC = new juce::AudioParameterFloat("chRC", "chRC", 0.00f, 1.00f, 0.50f));
+    addParameter(chLS = new juce::AudioParameterFloat("chLS", "chLS", 0.00f, 1.00f, 1.00f));
+    addParameter(chRS = new juce::AudioParameterFloat("chRS", "chRS", 0.00f, 1.00f, 1.00f));
+    addParameter(chC = new juce::AudioParameterFloat("chC", "chC", 0.00f, 1.00f, 0.50f));
+    addParameter(fc0 = new juce::AudioParameterFloat("fc0", "fc0", 0.01f, 120.0f, 30.00f));
+    addParameter(fc1 = new juce::AudioParameterFloat("fc1", "fc1", 0.01f, 120.0f, 30.00f));
+    addParameter(fc2 = new juce::AudioParameterFloat("fc2", "fc2", 0.01f, 120.0f, 30.00f));
+    addParameter(fc3 = new juce::AudioParameterFloat("fc3", "fc3", 0.01f, 120.0f, 30.00f));
+    addParameter(fc4 = new juce::AudioParameterFloat("fc4", "fc4", 0.01f, 120.0f, 30.00f));
+    addParameter(fc5 = new juce::AudioParameterFloat("fc5", "fc5", 0.01f, 120.0f, 30.00f));
+    addParameter(bl0 = new juce::AudioParameterFloat("bl0", "bl0", 0.00f, 2.0f, 1.00f));
+    addParameter(bl1 = new juce::AudioParameterFloat("bl1", "bl1", 0.00f, 2.0f, 1.00f));
+    addParameter(bl2 = new juce::AudioParameterFloat("bl2", "bl2", 0.00f, 2.0f, 1.00f));
+    addParameter(bl3 = new juce::AudioParameterFloat("bl3", "bl3", 0.00f, 2.0f, 1.00f));
+    addParameter(bl4 = new juce::AudioParameterFloat("bl4", "bl4", 0.00f, 2.0f, 1.00f));
+    addParameter(bl5 = new juce::AudioParameterFloat("bl5", "bl5", 0.00f, 2.0f, 1.00f));
 
     auto b0 = 3.844633506779265e-06;
     auto b1 = 7.68926701355853e-06;
@@ -58,12 +53,12 @@ DecoderAudioProcessor::DecoderAudioProcessor()
     //inst0.smoother.setCoefficients(coeffs);
     //inst0.C = 0.0f;
     //inst0.S = 0.0f;
-    inst0.factor = 0.5f;
-    inst1.factor = 0.5f;
-    inst2.factor = 0.5f;
-    inst3.factor = 0.5f;
-    inst4.factor = 0.5f;
-    inst5.factor = 0.5f;
+    //inst0.factor = 0.5f;
+    //inst1.factor = 0.5f;
+    //inst2.factor = 0.5f;
+    //inst3.factor = 0.5f;
+    //inst4.factor = 0.5f;
+    //inst5.factor = 0.5f;
 
     double vec1[] = { -3.49091142e-08, 2.46292042e-09, 3.88926097e-07, 5.38842464e-07, -4.32830436e-07, -1.24023767e-06, -4.32830436e-07, 5.38842464e-07, 3.88926097e-07, 2.46292042e-09, -3.49091142e-08 };
     double vec2[] = { 1.00000000e+00, -6.85241024e+00, 2.08375308e+01, -3.69741767e+01, 4.23197284e+01, -3.25792598e+01, 1.70414550e+01, -5.96309296e+00, 1.33137023e+00, -1.70651331e-01, 9.50672270e-03 };
@@ -205,14 +200,22 @@ void DecoderAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
 
     auto* inputL = buffer.getReadPointer(0);
     auto* inputR = buffer.getReadPointer(1);
+    
     auto* outputL = buffer.getWritePointer(0);
     auto* outputR = buffer.getWritePointer(1);
-    update_coeffs(inst0, fc0->get(), getSampleRate());
-    update_coeffs(inst1, fc1->get(), getSampleRate());
-    update_coeffs(inst2, fc2->get(), getSampleRate());
-    update_coeffs(inst3, fc3->get(), getSampleRate());
-    update_coeffs(inst4, fc4->get(), getSampleRate());
-    update_coeffs(inst5, fc5->get(), getSampleRate());
+    auto* outputC = buffer.getWritePointer(2);
+    auto* outputLS = buffer.getWritePointer(3);
+    auto* outputRS = buffer.getWritePointer(4);
+    auto* outputLC = buffer.getWritePointer(5);
+    auto* outputRC = buffer.getWritePointer(6);
+
+
+    inst0.update_coeffs(fc0->get(), getSampleRate());
+    inst1.update_coeffs(fc1->get(), getSampleRate());
+    inst2.update_coeffs(fc2->get(), getSampleRate());
+    inst3.update_coeffs(fc3->get(), getSampleRate());
+    inst4.update_coeffs(fc4->get(), getSampleRate());
+    inst5.update_coeffs(fc5->get(), getSampleRate());
     for (int i = 0; i < blockSize; i++)
     {
         auto L = inputL[i];
@@ -232,32 +235,41 @@ void DecoderAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
         auto b4R = B4[1]->process_sample(R) * bl4->get();
         auto b5R = B5[1]->process_sample(R) * bl5->get();
 
-        process(inst0, b0L, b0R);
-        process(inst1, b1L, b1R);
-        process(inst2, b2L, b2R);
-        process(inst3, b3L, b3R);
-        process(inst4, b4L, b4R);
-        process(inst5, b5L, b5R);
+        inst0.process(b0L, b0R);
+        inst1.process(b1L, b1R);
+        inst2.process(b2L, b2R);
+        inst3.process(b3L, b3R);
+        inst4.process(b4L, b4R);
+        inst5.process(b5L, b5R);
 
-        auto l0 = inst0.C * center0->get() - inst0.S * surround0->get();
-        auto l1 = inst1.C * center1->get() - inst1.S * surround1->get();
-        auto l2 = inst2.C * center2->get() - inst2.S * surround2->get();
-        auto l3 = inst3.C * center3->get() - inst3.S * surround3->get();
-        auto l4 = inst4.C * center4->get() - inst4.S * surround4->get();
-        auto l5 = inst5.C * center5->get() - inst5.S * surround5->get();
+        //auto l0 = inst0.C * center0->get() - inst0.S * surround0->get();
+        //auto l1 = inst1.C * center1->get() - inst1.S * surround1->get();
+        //auto l2 = inst2.C * center2->get() - inst2.S * surround2->get();
+        //auto l3 = inst3.C * center3->get() - inst3.S * surround3->get();
+        //auto l4 = inst4.C * center4->get() - inst4.S * surround4->get();
+        //auto l5 = inst5.C * center5->get() - inst5.S * surround5->get();
 
-        auto r0 = inst0.C * center0->get() + inst0.S * surround0->get();
-        auto r1 = inst1.C * center1->get() + inst1.S * surround1->get();
-        auto r2 = inst2.C * center2->get() + inst2.S * surround2->get();
-        auto r3 = inst3.C * center3->get() + inst3.S * surround3->get();
-        auto r4 = inst4.C * center4->get() + inst4.S * surround4->get();
-        auto r5 = inst5.C * center5->get() + inst5.S * surround5->get();
+        //auto r0 = inst0.C * center0->get() + inst0.S * surround0->get();
+        //auto r1 = inst1.C * center1->get() + inst1.S * surround1->get();
+        //auto r2 = inst2.C * center2->get() + inst2.S * surround2->get();
+        //auto r3 = inst3.C * center3->get() + inst3.S * surround3->get();
+        //auto r4 = inst4.C * center4->get() + inst4.S * surround4->get();
+        //auto r5 = inst5.C * center5->get() + inst5.S * surround5->get();
 
         //outputL[i] = instance.C * level1->get() - instance.S * level2->get();
         //outputR[i] = instance.C * level1->get() + instance.S * level2->get();
 
-        outputL[i] = l0+l1+l2+l3+l4+l5;
-        outputR[i] = r0+r1+r2+r3+r4+r5;
+        //outputL[i] = l0+l1+l2+l3+l4+l5;
+        //outputR[i] = r0+r1+r2+r3+r4+r5;
+        
+        outputL[i] = inputL[i] * chL->get();
+        outputR[i] = inputR[i] * chR->get();
+        outputC[i] = (inst0.C + inst1.C + inst2.C + inst3.C + inst4.C) * chC->get();
+        outputLC[i] = (inst0.LC + inst1.LC + inst2.LC + inst3.LC + inst4.LC) * chLC->get();
+        outputRC[i] = (inst0.RC + inst1.RC + inst2.RC + inst3.RC + inst4.RC) * chRC->get();
+        outputLS[i] = (inst0.LS + inst1.LS + inst2.LS + inst3.LS + inst4.LS) * chLS->get();
+        outputRS[i] = (inst0.RS + inst1.RS + inst2.RS + inst3.RS + inst4.RS) * chRS->get();
+
     }
 }
 

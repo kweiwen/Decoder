@@ -56,19 +56,22 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
-    decoder inst0;
-    decoder inst1;
-    decoder inst2;
-    decoder inst3;
-    decoder inst4;
-    decoder inst5;
+    juce::AudioChannelSet channelSet;
 
-    juce::AudioParameterFloat* center0; juce::AudioParameterFloat* surround0; 
-    juce::AudioParameterFloat* center1; juce::AudioParameterFloat* surround1; 
-    juce::AudioParameterFloat* center2; juce::AudioParameterFloat* surround2; 
-    juce::AudioParameterFloat* center3; juce::AudioParameterFloat* surround3; 
-    juce::AudioParameterFloat* center4; juce::AudioParameterFloat* surround4; 
-    juce::AudioParameterFloat* center5; juce::AudioParameterFloat* surround5; 
+    surround inst0;
+    surround inst1;
+    surround inst2;
+    surround inst3;
+    surround inst4;
+    surround inst5;
+
+    juce::AudioParameterFloat* chLC;
+    juce::AudioParameterFloat* chRC;
+    juce::AudioParameterFloat* chLS;
+    juce::AudioParameterFloat* chRS;
+    juce::AudioParameterFloat* chC;
+    juce::AudioParameterFloat* chL;
+    juce::AudioParameterFloat* chR;
 
     juce::AudioParameterFloat* fc0;
     juce::AudioParameterFloat* fc1;
