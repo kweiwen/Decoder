@@ -22,25 +22,25 @@ DecoderAudioProcessor::DecoderAudioProcessor()
                        )
 #endif
 {
-    addParameter(chL = new juce::AudioParameterFloat("chL", "chL", 0.00f, 2.00f, 0.50f));
-    addParameter(chR = new juce::AudioParameterFloat("chR", "chR", 0.00f, 2.00f, 0.50f));
-    addParameter(chLC = new juce::AudioParameterFloat("chLC", "chLC", 0.00f, 2.00f, 0.50f));
-    addParameter(chRC = new juce::AudioParameterFloat("chRC", "chRC", 0.00f, 2.00f, 0.50f));
+    addParameter(chL = new juce::AudioParameterFloat("chL", "chL", 0.00f, 1.00f, 0.50f));
+    addParameter(chR = new juce::AudioParameterFloat("chR", "chR", 0.00f, 1.00f, 0.50f));
+    addParameter(chC = new juce::AudioParameterFloat("chC", "chC", 0.00f, 1.00f, 0.50f));
+    addParameter(chLC = new juce::AudioParameterFloat("chLC", "chLC", 0.00f, 1.00f, 0.50f));
+    addParameter(chRC = new juce::AudioParameterFloat("chRC", "chRC", 0.00f, 1.00f, 0.50f));
     addParameter(chLS = new juce::AudioParameterFloat("chLS", "chLS", 0.00f, 2.00f, 2.00f));
     addParameter(chRS = new juce::AudioParameterFloat("chRS", "chRS", 0.00f, 2.00f, 2.00f));
-    addParameter(chC = new juce::AudioParameterFloat("chC", "chC", 0.00f, 1.00f, 0.50f));
-    addParameter(fc0 = new juce::AudioParameterFloat("fc0", "fc0", 0.01f, 120.0f, 30.00f));
-    addParameter(fc1 = new juce::AudioParameterFloat("fc1", "fc1", 0.01f, 120.0f, 30.00f));
-    addParameter(fc2 = new juce::AudioParameterFloat("fc2", "fc2", 0.01f, 120.0f, 30.00f));
-    addParameter(fc3 = new juce::AudioParameterFloat("fc3", "fc3", 0.01f, 120.0f, 30.00f));
-    addParameter(fc4 = new juce::AudioParameterFloat("fc4", "fc4", 0.01f, 120.0f, 30.00f));
-    addParameter(fc5 = new juce::AudioParameterFloat("fc5", "fc5", 0.01f, 120.0f, 30.00f));
-    addParameter(bl0 = new juce::AudioParameterFloat("bl0", "bl0", 0.00f, 2.0f, 1.00f));
-    addParameter(bl1 = new juce::AudioParameterFloat("bl1", "bl1", 0.00f, 2.0f, 1.00f));
-    addParameter(bl2 = new juce::AudioParameterFloat("bl2", "bl2", 0.00f, 2.0f, 1.00f));
-    addParameter(bl3 = new juce::AudioParameterFloat("bl3", "bl3", 0.00f, 2.0f, 1.00f));
-    addParameter(bl4 = new juce::AudioParameterFloat("bl4", "bl4", 0.00f, 2.0f, 1.00f));
-    addParameter(bl5 = new juce::AudioParameterFloat("bl5", "bl5", 0.00f, 2.0f, 1.00f));
+    addParameter(fc0 = new juce::AudioParameterFloat("fc0", "fc0", 0.01f, 120.0f, 60.00f));
+    addParameter(fc1 = new juce::AudioParameterFloat("fc1", "fc1", 0.01f, 120.0f, 60.00f));
+    addParameter(fc2 = new juce::AudioParameterFloat("fc2", "fc2", 0.01f, 120.0f, 60.00f));
+    addParameter(fc3 = new juce::AudioParameterFloat("fc3", "fc3", 0.01f, 120.0f, 60.00f));
+    addParameter(fc4 = new juce::AudioParameterFloat("fc4", "fc4", 0.01f, 120.0f, 60.00f));
+    addParameter(fc5 = new juce::AudioParameterFloat("fc5", "fc5", 0.01f, 120.0f, 60.00f));
+    addParameter(bl0 = new juce::AudioParameterFloat("bl0", "bl0", 0.00f, 1.0f, 1.00f));
+    addParameter(bl1 = new juce::AudioParameterFloat("bl1", "bl1", 0.00f, 1.0f, 1.00f));
+    addParameter(bl2 = new juce::AudioParameterFloat("bl2", "bl2", 0.00f, 1.0f, 1.00f));
+    addParameter(bl3 = new juce::AudioParameterFloat("bl3", "bl3", 0.00f, 1.0f, 1.00f));
+    addParameter(bl4 = new juce::AudioParameterFloat("bl4", "bl4", 0.00f, 1.0f, 1.00f));
+    addParameter(bl5 = new juce::AudioParameterFloat("bl5", "bl5", 0.00f, 1.0f, 1.00f));
 
     auto b0 = 3.844633506779265e-06;
     auto b1 = 7.68926701355853e-06;

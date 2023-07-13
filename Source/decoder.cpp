@@ -55,6 +55,7 @@ surround::~surround()
 
 void surround::process(float L, float R)
 {
+    float norm = sqrt(2) * 0.5f; 
     process_(&unit_main, L, R);
     process_(&unit_L, L, C);
     process_(&unit_R, R, C);
@@ -81,7 +82,7 @@ void surround::process_(decoder* self, float L, float R)
     auto VCA_L = L * sin(self->factor * M_PI / 2);
     auto VCA_R = R * sin((1 - self->factor) * M_PI / 2);
 
-    self->C = VCA_L + VCA_R;
+    self->C = (VCA_L + VCA_R) * 0.5f;
     self->S = VCA_L - VCA_R;
 
     double FWR_L = fabs(VCA_L);
