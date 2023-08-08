@@ -88,3 +88,26 @@ private:
     double* x;
     double* y;
 };
+
+
+class CoupledAllPass
+{
+public:
+    IIRFilter A1;
+    IIRFilter A2;
+
+    float LP;
+    float HP;
+
+    void process(double* input, double* output, int block_size)
+    {
+        for (int i = 0; i < block_size; i++)
+        {
+            auto outputA1 = A1.process_sample(input[i]);
+            auto outputA2 = A2.process_sample(input[i]);
+
+            LP = outputA1 + outputA2;
+            HP = outputA1 - outputA2;
+        }
+    }
+};
