@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 #include "decoder.h"
 #include "IIRFilter.h"
+#include "CircularBuffer.h"
 
 class DecoderAudioProcessor  : public juce::AudioProcessor
                             #if JucePlugin_Enable_ARA
@@ -72,6 +73,8 @@ private:
     juce::AudioParameterFloat* chC;
     juce::AudioParameterFloat* chL;
     juce::AudioParameterFloat* chR;
+    juce::AudioParameterFloat* delayTimeSR;
+    juce::AudioParameterFloat* delayTime;
 
     juce::AudioParameterFloat* fc0;
     juce::AudioParameterFloat* fc1;
@@ -86,6 +89,11 @@ private:
     juce::AudioParameterFloat* bl3;
     juce::AudioParameterFloat* bl4;
     juce::AudioParameterFloat* bl5;
+
+    std::unique_ptr<CircularBuffer<double>> CB_LS;
+    std::unique_ptr<CircularBuffer<double>> CB_RS;
+    std::unique_ptr<CircularBuffer<double>> CB_LC;
+    std::unique_ptr<CircularBuffer<double>> CB_RC;
 
     std::vector<std::unique_ptr<IIRFilter>> B0;
     std::vector<std::unique_ptr<IIRFilter>> B1;

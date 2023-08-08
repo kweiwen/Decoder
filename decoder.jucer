@@ -4,6 +4,8 @@
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="SxeuiD" name="decoder">
     <GROUP id="{FFCECFC2-721E-7F95-EB96-FD3B034A4418}" name="Source">
+      <FILE id="BSaozf" name="CircularBuffer.h" compile="0" resource="0"
+            file="Source/CircularBuffer.h"/>
       <FILE id="r0DRcL" name="decoder.cpp" compile="1" resource="0" file="Source/decoder.cpp"/>
       <FILE id="ejLXn3" name="decoder.h" compile="0" resource="0" file="Source/decoder.h"/>
       <FILE id="RTTZXj" name="IIRFilter.h" compile="0" resource="0" file="Source/IIRFilter.h"/>

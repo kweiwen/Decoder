@@ -22,19 +22,21 @@ DecoderAudioProcessor::DecoderAudioProcessor()
                        )
 #endif
 {
+    addParameter(delayTimeSR = new juce::AudioParameterFloat("timeSR", "timeSR", 1.00f, 2048.00f, 2048.00f));
+    addParameter(delayTime   = new juce::AudioParameterFloat("time", "time", 1.00f, 1024.00f, 1024.00f));
     addParameter(chL = new juce::AudioParameterFloat("chL", "chL", 0.00f, 1.00f, 0.50f));
     addParameter(chR = new juce::AudioParameterFloat("chR", "chR", 0.00f, 1.00f, 0.50f));
     addParameter(chC = new juce::AudioParameterFloat("chC", "chC", 0.00f, 1.00f, 0.50f));
     addParameter(chLC = new juce::AudioParameterFloat("chLC", "chLC", 0.00f, 1.00f, 0.50f));
     addParameter(chRC = new juce::AudioParameterFloat("chRC", "chRC", 0.00f, 1.00f, 0.50f));
-    addParameter(chLS = new juce::AudioParameterFloat("chLS", "chLS", 0.00f, 2.00f, 2.00f));
-    addParameter(chRS = new juce::AudioParameterFloat("chRS", "chRS", 0.00f, 2.00f, 2.00f));
-    addParameter(fc0 = new juce::AudioParameterFloat("fc0", "fc0", 0.01f, 120.0f, 60.00f));
-    addParameter(fc1 = new juce::AudioParameterFloat("fc1", "fc1", 0.01f, 120.0f, 60.00f));
-    addParameter(fc2 = new juce::AudioParameterFloat("fc2", "fc2", 0.01f, 120.0f, 60.00f));
-    addParameter(fc3 = new juce::AudioParameterFloat("fc3", "fc3", 0.01f, 120.0f, 60.00f));
-    addParameter(fc4 = new juce::AudioParameterFloat("fc4", "fc4", 0.01f, 120.0f, 60.00f));
-    addParameter(fc5 = new juce::AudioParameterFloat("fc5", "fc5", 0.01f, 120.0f, 60.00f));
+    addParameter(chLS = new juce::AudioParameterFloat("chLS", "chLS", 0.00f, 4.00f, 4.00f));
+    addParameter(chRS = new juce::AudioParameterFloat("chRS", "chRS", 0.00f, 4.00f, 4.00f));
+    addParameter(fc0 = new juce::AudioParameterFloat("fc0", "fc0", 5.0f, 120.0f, 90.00f));
+    addParameter(fc1 = new juce::AudioParameterFloat("fc1", "fc1", 5.0f, 120.0f, 90.00f));
+    addParameter(fc2 = new juce::AudioParameterFloat("fc2", "fc2", 5.0f, 120.0f, 90.00f));
+    addParameter(fc3 = new juce::AudioParameterFloat("fc3", "fc3", 5.0f, 120.0f, 90.00f));
+    addParameter(fc4 = new juce::AudioParameterFloat("fc4", "fc4", 5.0f, 120.0f, 90.00f));
+    addParameter(fc5 = new juce::AudioParameterFloat("fc5", "fc5", 5.0f, 120.0f, 90.00f));
     addParameter(bl0 = new juce::AudioParameterFloat("bl0", "bl0", 0.00f, 1.0f, 1.00f));
     addParameter(bl1 = new juce::AudioParameterFloat("bl1", "bl1", 0.00f, 1.0f, 1.00f));
     addParameter(bl2 = new juce::AudioParameterFloat("bl2", "bl2", 0.00f, 1.0f, 1.00f));
@@ -48,17 +50,6 @@ DecoderAudioProcessor::DecoderAudioProcessor()
     auto a0 = 1.0;
     auto a1 = -1.9944464105419266;
     auto a2 = 0.9944617890759537;
-
-    //juce::IIRCoefficients coeffs(b0, b1, b2, a0, a1, a2);
-    //inst0.smoother.setCoefficients(coeffs);
-    //inst0.C = 0.0f;
-    //inst0.S = 0.0f;
-    //inst0.factor = 0.5f;
-    //inst1.factor = 0.5f;
-    //inst2.factor = 0.5f;
-    //inst3.factor = 0.5f;
-    //inst4.factor = 0.5f;
-    //inst5.factor = 0.5f;
 
     double vec1[] = { -3.49091142e-08, 2.46292042e-09, 3.88926097e-07, 5.38842464e-07, -4.32830436e-07, -1.24023767e-06, -4.32830436e-07, 5.38842464e-07, 3.88926097e-07, 2.46292042e-09, -3.49091142e-08 };
     double vec2[] = { 1.00000000e+00, -6.85241024e+00, 2.08375308e+01, -3.69741767e+01, 4.23197284e+01, -3.25792598e+01, 1.70414550e+01, -5.96309296e+00, 1.33137023e+00, -1.70651331e-01, 9.50672270e-03 };
@@ -156,6 +147,20 @@ void DecoderAudioProcessor::changeProgramName (int index, const juce::String& ne
 //==============================================================================
 void DecoderAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    CB_LS.reset(new CircularBuffer<double>);
+    CB_RS.reset(new CircularBuffer<double>);
+    CB_LC.reset(new CircularBuffer<double>);
+    CB_RC.reset(new CircularBuffer<double>);
+
+    CB_LS->createCircularBuffer(8192);
+    CB_LS->flushBuffer();
+    CB_RS->createCircularBuffer(8192);
+    CB_RS->flushBuffer();
+
+    CB_LC->createCircularBuffer(8192);
+    CB_LC->flushBuffer();
+    CB_RC->createCircularBuffer(8192);
+    CB_RC->flushBuffer();
 }
 
 void DecoderAudioProcessor::releaseResources()
@@ -242,33 +247,23 @@ void DecoderAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
         inst4.process(b4L, b4R);
         inst5.process(b5L, b5R);
 
-        //auto l0 = inst0.C * center0->get() - inst0.S * surround0->get();
-        //auto l1 = inst1.C * center1->get() - inst1.S * surround1->get();
-        //auto l2 = inst2.C * center2->get() - inst2.S * surround2->get();
-        //auto l3 = inst3.C * center3->get() - inst3.S * surround3->get();
-        //auto l4 = inst4.C * center4->get() - inst4.S * surround4->get();
-        //auto l5 = inst5.C * center5->get() - inst5.S * surround5->get();
+        auto delayLine_LS = CB_LS->readBuffer(delayTimeSR->get(), false);
+        auto delayLine_RS = CB_RS->readBuffer(delayTimeSR->get(), false);
+        auto delayLine_LC = CB_LC->readBuffer(delayTime->get(), false);
+        auto delayLine_RC = CB_RC->readBuffer(delayTime->get(), false);
 
-        //auto r0 = inst0.C * center0->get() + inst0.S * surround0->get();
-        //auto r1 = inst1.C * center1->get() + inst1.S * surround1->get();
-        //auto r2 = inst2.C * center2->get() + inst2.S * surround2->get();
-        //auto r3 = inst3.C * center3->get() + inst3.S * surround3->get();
-        //auto r4 = inst4.C * center4->get() + inst4.S * surround4->get();
-        //auto r5 = inst5.C * center5->get() + inst5.S * surround5->get();
-
-        //outputL[i] = instance.C * level1->get() - instance.S * level2->get();
-        //outputR[i] = instance.C * level1->get() + instance.S * level2->get();
-
-        //outputL[i] = l0+l1+l2+l3+l4+l5;
-        //outputR[i] = r0+r1+r2+r3+r4+r5;
+        CB_LS->writeBuffer((inst0.LS + inst1.LS + inst2.LS + inst3.LS + inst4.LS + inst5.LS));
+        CB_RS->writeBuffer((inst0.RS + inst1.RS + inst2.RS + inst3.RS + inst4.RS + inst5.RS));
+        CB_LC->writeBuffer((inst0.LC + inst1.LC + inst2.LC + inst3.LC + inst4.LC + inst5.LC));
+        CB_RC->writeBuffer((inst0.RC + inst1.RC + inst2.RC + inst3.RC + inst4.RC + inst5.RC));
         
         outputL[i] = inputL[i] * chL->get();
         outputR[i] = inputR[i] * chR->get();
         outputC[i] = (inst0.C + inst1.C + inst2.C + inst3.C + inst4.C + inst5.C) * chC->get();
-        outputLC[i] = (inst0.LC + inst1.LC + inst2.LC + inst3.LC + inst4.LC + inst5.LC) * chLC->get();
-        outputRC[i] = (inst0.RC + inst1.RC + inst2.RC + inst3.RC + inst4.RC + inst5.RC) * chRC->get();
-        outputLS[i] = (inst0.LS + inst1.LS + inst2.LS + inst3.LS + inst4.LS + inst5.LS) * chLS->get();
-        outputRS[i] = (inst0.RS + inst1.RS + inst2.RS + inst3.RS + inst4.RS + inst5.RS) * chRS->get();
+        outputLC[i] = delayLine_LC * chLC->get();
+        outputRC[i] = delayLine_RC * chRC->get();
+        outputLS[i] = delayLine_LS * chLS->get();
+        outputRS[i] = delayLine_RS * chRS->get();
 
     }
 }
