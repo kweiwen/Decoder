@@ -36,46 +36,67 @@ DecoderAudioProcessor::DecoderAudioProcessor()
     addParameter(fc2 = new juce::AudioParameterFloat("fc2", "fc2", 5.0f, 120.0f, 90.00f));
     addParameter(fc3 = new juce::AudioParameterFloat("fc3", "fc3", 5.0f, 120.0f, 90.00f));
     addParameter(fc4 = new juce::AudioParameterFloat("fc4", "fc4", 5.0f, 120.0f, 90.00f));
-    addParameter(fc5 = new juce::AudioParameterFloat("fc5", "fc5", 5.0f, 120.0f, 90.00f));
     addParameter(bl0 = new juce::AudioParameterFloat("bl0", "bl0", 0.00f, 1.0f, 1.00f));
     addParameter(bl1 = new juce::AudioParameterFloat("bl1", "bl1", 0.00f, 1.0f, 1.00f));
     addParameter(bl2 = new juce::AudioParameterFloat("bl2", "bl2", 0.00f, 1.0f, 1.00f));
     addParameter(bl3 = new juce::AudioParameterFloat("bl3", "bl3", 0.00f, 1.0f, 1.00f));
     addParameter(bl4 = new juce::AudioParameterFloat("bl4", "bl4", 0.00f, 1.0f, 1.00f));
-    addParameter(bl5 = new juce::AudioParameterFloat("bl5", "bl5", 0.00f, 1.0f, 1.00f));
 
-    auto b0 = 3.844633506779265e-06;
-    auto b1 = 7.68926701355853e-06;
-    auto b2 = 3.844633506779265e-06;
-    auto a0 = 1.0;
-    auto a1 = -1.9944464105419266;
-    auto a2 = 0.9944617890759537;
+    //auto b0 = 3.844633506779265e-06;
+    //auto b1 = 7.68926701355853e-06;
+    //auto b2 = 3.844633506779265e-06;
+    //auto a0 = 1.0;
+    //auto a1 = -1.9944464105419266;
+    //auto a2 = 0.9944617890759537;
 
-    double vec1[] = { -3.49091142e-08, 2.46292042e-09, 3.88926097e-07, 5.38842464e-07, -4.32830436e-07, -1.24023767e-06, -4.32830436e-07, 5.38842464e-07, 3.88926097e-07, 2.46292042e-09, -3.49091142e-08 };
-    double vec2[] = { 1.00000000e+00, -6.85241024e+00, 2.08375308e+01, -3.69741767e+01, 4.23197284e+01, -3.25792598e+01, 1.70414550e+01, -5.96309296e+00, 1.33137023e+00, -1.70651331e-01, 9.50672270e-03 };
-    double vec3[] = { 3.25740238e-05, -1.32594269e-04, -9.31257227e-05, 5.39569774e-04, 6.05516989e-05, -8.13951010e-04, 6.05516989e-05, 5.39569774e-04, -9.31257227e-05, -1.32594269e-04, 3.25740238e-05 };
-    double vec4[] = { 1.00000000e+00, -6.85241024e+00, 2.08375308e+01, -3.69741767e+01, 4.23197284e+01, -3.25792598e+01, 1.70414550e+01, -5.96309296e+00, 1.33137023e+00, -1.70651331e-01, 9.50672270e-03 };
-    double vec5[] = { 0.0001336, -0.00053496, -0.00039965, 0.00214215, 0.00026605, -0.00321437, 0.00026605, 0.00214215, -0.00039965, -0.00053496, 0.0001336 };
-    double vec6[] = { 1.00000000e+00, -6.85241024e+00, 2.08375308e+01, -3.69741767e+01, 4.23197284e+01, -3.25792598e+01, 1.70414550e+01, -5.96309296e+00, 1.33137023e+00, -1.70651331e-01, 9.50672270e-03 };
-    double vec7[] = { -0.00770798, 0.06169688, -0.16206595, 0.12359223, 0.16977392, -0.37057822, 0.16977392, 0.12359223, -0.16206595, 0.06169688, -0.00770798 };
-    double vec8[] = { 1.00000000e+00, -6.85241024e+00, 2.08375308e+01, -3.69741767e+01, 4.23197284e+01, -3.25792598e+01, 1.70414550e+01, -5.96309296e+00, 1.33137023e+00, -1.70651331e-01, 9.50672270e-03 };
-    double vec9[] = { -0.05252213, 0.31997016, -0.70222094, 0.4396943, 0.75474308, -1.51932893, 0.75474308, 0.4396943, -0.70222094, 0.31997016, -0.05252213 };
-    double vec10[] = { 1.00000000e+00, -6.85241024e+00, 2.08375308e+01, -3.69741767e+01, 4.23197284e+01, -3.25792598e+01, 1.70414550e+01, -5.96309296e+00, 1.33137023e+00, -1.70651331e-01, 9.50672270e-03 };
-    double vec11[] = { 0.15756639, -1.59017606, 7.20683593, -19.31581487, 33.90539323, -40.72760926, 33.90539323, -19.31581487, 7.20683593, -1.59017606, 0.15756639 };
-    double vec12[] = { 1.00000000e+00, -6.85241024e+00, 2.08375308e+01, -3.69741767e+01, 4.23197284e+01, -3.25792598e+01, 1.70414550e+01, -5.96309296e+00, 1.33137023e+00, -1.70651331e-01, 9.50672270e-03 };
+    double a1[] = { 0.96779909, -1.93663508,  0.96779909 };
+    double f1[] = { -0.00025922, -0.00051845, -0.00025922 };
+    double f1_[] = { 0.96805831, -1.93611663,  0.96805831 };
+    double denominator1[] = { 1.0, -1.93559818,  0.93663508 };
+
+    double a2[] = { 0.87697646, -1.76908772,  0.87697646 };
+    double f2[] = { -0.0037837, -0.0075674, -0.0037837 };
+    double f2_[] = { 0.88076016, -1.76152032,  0.88076016 };
+    double denominator2[] = { 1.0 , -1.75395293,  0.76908772 };
+
+    double a3[] = { 0.57735027, -1.33333333,  0.57735027 };
+    double f3[] = { -0.0446582, -0.0893164, -0.0446582 };
+    double f3_[] = { 0.62200847, -1.24401694,  0.62200847 };
+    double denominator3[] = { 1.0 , -1.15470054,  0.33333333 };
+
+    double f4[] = { 2.35193153e-10, 9.40772611e-10, 1.41115892e-09, 9.40772611e-10, 2.35193153e-10 };
+    double f4_[] = { 0.98895425, -3.955817,  5.9337255, -3.955817,  0.98895425 };
+    double denominator4[] = { 1.0 , -3.97778581,  5.93360349, -3.93384818,  0.97803051 };
+
+    A1.push_back(std::make_unique<IIRFilter>(a1, denominator1));
+    A1.push_back(std::make_unique<IIRFilter>(a1, denominator1));
+    A11.push_back(std::make_unique<IIRFilter>(a1, denominator1));
+    A11.push_back(std::make_unique<IIRFilter>(a1, denominator1));
+    F1.push_back(std::make_unique<IIRFilter>(f1, denominator1));
+    F1.push_back(std::make_unique<IIRFilter>(f1, denominator1));
+    F1_.push_back(std::make_unique<IIRFilter>(f1_, denominator1));
+    F1_.push_back(std::make_unique<IIRFilter>(f1_, denominator1));
+
+    A21.push_back(std::make_unique<IIRFilter>(a2, denominator2));
+    A21.push_back(std::make_unique<IIRFilter>(a2, denominator2));
+    F2.push_back(std::make_unique<IIRFilter>(f2, denominator2));
+    F2.push_back(std::make_unique<IIRFilter>(f2, denominator2));
+    F2_.push_back(std::make_unique<IIRFilter>(f2_, denominator2));
+    F2_.push_back(std::make_unique<IIRFilter>(f2_, denominator2));
     
-    B0.push_back(std::make_unique<IIRFilter>(vec1,  vec2));
-    B0.push_back(std::make_unique<IIRFilter>(vec1,  vec2));
-    B1.push_back(std::make_unique<IIRFilter>(vec3,  vec4));
-    B1.push_back(std::make_unique<IIRFilter>(vec3,  vec4));
-    B2.push_back(std::make_unique<IIRFilter>(vec5,  vec6));
-    B2.push_back(std::make_unique<IIRFilter>(vec5,  vec6));
-    B3.push_back(std::make_unique<IIRFilter>(vec7,  vec8));
-    B3.push_back(std::make_unique<IIRFilter>(vec7,  vec8));
-    B4.push_back(std::make_unique<IIRFilter>(vec9,  vec10));
-    B4.push_back(std::make_unique<IIRFilter>(vec9,  vec10));
-    B5.push_back(std::make_unique<IIRFilter>(vec11, vec12));
-    B5.push_back(std::make_unique<IIRFilter>(vec11, vec12));
+    A3.push_back(std::make_unique<IIRFilter>(a3, denominator3));
+    A3.push_back(std::make_unique<IIRFilter>(a3, denominator3));
+    A31.push_back(std::make_unique<IIRFilter>(a3, denominator3));
+    A31.push_back(std::make_unique<IIRFilter>(a3, denominator3));
+    F3.push_back(std::make_unique<IIRFilter>(f3, denominator3));
+    F3.push_back(std::make_unique<IIRFilter>(f3, denominator3));
+    F3_.push_back(std::make_unique<IIRFilter>(f3_, denominator3));
+    F3_.push_back(std::make_unique<IIRFilter>(f3_, denominator3));
+
+    F4.push_back(std::make_unique<IIRFilter>(f4, denominator4));
+    F4.push_back(std::make_unique<IIRFilter>(f4, denominator4));
+    F4_.push_back(std::make_unique<IIRFilter>(f4_, denominator4));
+    F4_.push_back(std::make_unique<IIRFilter>(f4_, denominator4));
 }
 
 DecoderAudioProcessor::~DecoderAudioProcessor()
@@ -220,50 +241,69 @@ void DecoderAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     inst2.update_coeffs(fc2->get(), getSampleRate());
     inst3.update_coeffs(fc3->get(), getSampleRate());
     inst4.update_coeffs(fc4->get(), getSampleRate());
-    inst5.update_coeffs(fc5->get(), getSampleRate());
+
     for (int i = 0; i < blockSize; i++)
     {
         auto L = inputL[i];
         auto R = inputR[i];
 
-        auto b0L = B0[0]->process_sample(L) * bl0->get();
-        auto b1L = B1[0]->process_sample(L) * bl1->get();
-        auto b2L = B2[0]->process_sample(L) * bl2->get();
-        auto b3L = B3[0]->process_sample(L) * bl3->get();
-        auto b4L = B4[0]->process_sample(L) * bl4->get();
-        auto b5L = B5[0]->process_sample(L) * bl5->get();
-
-        auto b0R = B0[1]->process_sample(R) * bl0->get();
-        auto b1R = B1[1]->process_sample(R) * bl1->get();
-        auto b2R = B2[1]->process_sample(R) * bl2->get();
-        auto b3R = B3[1]->process_sample(R) * bl3->get();
-        auto b4R = B4[1]->process_sample(R) * bl4->get();
-        auto b5R = B5[1]->process_sample(R) * bl5->get();
-
-        inst0.process(b0L, b0R);
-        inst1.process(b1L, b1R);
-        inst2.process(b2L, b2R);
-        inst3.process(b3L, b3R);
-        inst4.process(b4L, b4R);
-        inst5.process(b5L, b5R);
-
-        auto delayLine_LS = CB_LS->readBuffer(delayTimeSR->get(), false);
-        auto delayLine_RS = CB_RS->readBuffer(delayTimeSR->get(), false);
-        auto delayLine_LC = CB_LC->readBuffer(delayTime->get(), false);
-        auto delayLine_RC = CB_RC->readBuffer(delayTime->get(), false);
-
-        CB_LS->writeBuffer((inst0.LS + inst1.LS + inst2.LS + inst3.LS + inst4.LS + inst5.LS));
-        CB_RS->writeBuffer((inst0.RS + inst1.RS + inst2.RS + inst3.RS + inst4.RS + inst5.RS));
-        CB_LC->writeBuffer((inst0.LC + inst1.LC + inst2.LC + inst3.LC + inst4.LC + inst5.LC));
-        CB_RC->writeBuffer((inst0.RC + inst1.RC + inst2.RC + inst3.RC + inst4.RC + inst5.RC));
+        // L Channel
+        auto F4L = F4[0]->process_sample(L);
+        auto F4_L = F4_[0]->process_sample(L);
         
-        outputL[i] = inputL[i] * chL->get();
-        outputR[i] = inputR[i] * chR->get();
-        outputC[i] = (inst0.C + inst1.C + inst2.C + inst3.C + inst4.C + inst5.C) * chC->get();
-        outputLC[i] = delayLine_LC * chLC->get();
-        outputRC[i] = delayLine_RC * chRC->get();
-        outputLS[i] = delayLine_LS * chLS->get();
-        outputRS[i] = delayLine_RS * chRS->get();
+        auto F2L = F2[0]->process_sample(F4_L);
+        auto F2_L = F2_[0]->process_sample(F4_L);
+
+        auto A3_L = A3[0]->process_sample(F2L);
+        auto A1_L = A1[0]->process_sample(F2_L);
+   
+        auto b0L = A11[0]->process_sample(A21[0]->process_sample(A31[0]->process_sample(F4L))) * bl0->get();
+        auto b1L = F1[0]->process_sample(A3_L) * bl1->get();
+        auto b2L = F1_[0]->process_sample(A3_L) * bl2->get();
+        auto b3L = F3[0]->process_sample(A1_L) * bl3->get();
+        auto b4L = F3_[0]->process_sample(A1_L) * bl4->get();
+
+        // R Channel
+        auto F4R = F4[1]->process_sample(R);
+        auto F4_R = F4_[1]->process_sample(R);
+
+        auto F2R = F2[1]->process_sample(F4_R);
+        auto F2_R = F2_[1]->process_sample(F4_R);
+
+        auto A3_R = A3[1]->process_sample(F2R);
+        auto A1_R = A1[1]->process_sample(F2_R);
+
+        auto b0R = A11[1]->process_sample(A21[1]->process_sample(A31[1]->process_sample(F4R))) * bl0->get();
+        auto b1R = F1[1]->process_sample(A3_R) * bl1->get();
+        auto b2R = F1_[1]->process_sample(A3_R) * bl2->get();
+        auto b3R = F3[1]->process_sample(A1_R) * bl3->get();
+        auto b4R = F3_[1]->process_sample(A1_R) * bl4->get();
+
+        //inst0.process(b0L, b0R);
+        //inst1.process(b1L, b1R);
+        //inst2.process(b2L, b2R);
+        //inst3.process(b3L, b3R);
+        //inst4.process(b4L, b4R);
+
+        //auto delayLine_LS = CB_LS->readBuffer(delayTimeSR->get(), false);
+        //auto delayLine_RS = CB_RS->readBuffer(delayTimeSR->get(), false);
+        //auto delayLine_LC = CB_LC->readBuffer(delayTime->get(), false);
+        //auto delayLine_RC = CB_RC->readBuffer(delayTime->get(), false);
+
+        //CB_LS->writeBuffer((inst0.LS + inst1.LS + inst2.LS + inst3.LS + inst4.LS));
+        //CB_RS->writeBuffer((inst0.RS + inst1.RS + inst2.RS + inst3.RS + inst4.RS));
+        //CB_LC->writeBuffer((inst0.LC + inst1.LC + inst2.LC + inst3.LC + inst4.LC));
+        //CB_RC->writeBuffer((inst0.RC + inst1.RC + inst2.RC + inst3.RC + inst4.RC));
+        
+        //outputL[i] = inputL[i] * chL->get();
+        //outputR[i] = inputR[i] * chR->get();
+        //outputC[i] = (inst0.C + inst1.C + inst2.C + inst3.C + inst4.C) * chC->get();
+        //outputLC[i] = delayLine_LC * chLC->get();
+        //outputRC[i] = delayLine_RC * chRC->get();
+        //outputLS[i] = delayLine_LS * chLS->get();
+        //outputRS[i] = delayLine_RS * chRS->get();
+        outputL[i] = b0L + b1L + b2L + b3L + b4L;
+        outputR[i] = b0R + b1R + b2R + b3R + b4R;
 
     }
 }

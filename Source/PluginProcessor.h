@@ -64,7 +64,6 @@ private:
     surround inst2;
     surround inst3;
     surround inst4;
-    surround inst5;
 
     juce::AudioParameterFloat* chLC;
     juce::AudioParameterFloat* chRC;
@@ -81,26 +80,36 @@ private:
     juce::AudioParameterFloat* fc2;
     juce::AudioParameterFloat* fc3;
     juce::AudioParameterFloat* fc4;
-    juce::AudioParameterFloat* fc5;
 
     juce::AudioParameterFloat* bl0;
     juce::AudioParameterFloat* bl1;
     juce::AudioParameterFloat* bl2;
     juce::AudioParameterFloat* bl3;
     juce::AudioParameterFloat* bl4;
-    juce::AudioParameterFloat* bl5;
 
     std::unique_ptr<CircularBuffer<double>> CB_LS;
     std::unique_ptr<CircularBuffer<double>> CB_RS;
     std::unique_ptr<CircularBuffer<double>> CB_LC;
     std::unique_ptr<CircularBuffer<double>> CB_RC;
 
-    std::vector<std::unique_ptr<IIRFilter>> B0;
-    std::vector<std::unique_ptr<IIRFilter>> B1;
-    std::vector<std::unique_ptr<IIRFilter>> B2;
-    std::vector<std::unique_ptr<IIRFilter>> B3;
-    std::vector<std::unique_ptr<IIRFilter>> B4;
-    std::vector<std::unique_ptr<IIRFilter>> B5;
+    std::vector<std::unique_ptr<IIRFilter>> A11;
+    std::vector<std::unique_ptr<IIRFilter>> A21;
+    std::vector<std::unique_ptr<IIRFilter>> A31;
+
+    std::vector<std::unique_ptr<IIRFilter>> A1;
+    std::vector<std::unique_ptr<IIRFilter>> A3;
+
+    std::vector<std::unique_ptr<IIRFilter>> F1;
+    std::vector<std::unique_ptr<IIRFilter>> F1_;
+
+    std::vector<std::unique_ptr<IIRFilter>> F2;
+    std::vector<std::unique_ptr<IIRFilter>> F2_;
+
+    std::vector<std::unique_ptr<IIRFilter>> F3;
+    std::vector<std::unique_ptr<IIRFilter>> F3_;
+
+    std::vector<std::unique_ptr<IIRFilter>> F4;
+    std::vector<std::unique_ptr<IIRFilter>> F4_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DecoderAudioProcessor)
 };
