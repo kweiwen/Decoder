@@ -92,24 +92,19 @@ private:
     std::unique_ptr<CircularBuffer<double>> CB_LC;
     std::unique_ptr<CircularBuffer<double>> CB_RC;
 
-    std::vector<std::unique_ptr<IIRFilter>> A11;
-    std::vector<std::unique_ptr<IIRFilter>> A21;
-    std::vector<std::unique_ptr<IIRFilter>> A31;
+    CoupledAllPass<double> F1;
+    //CoupledAllPass<double> F2;
+    //StereoCoupledAllPass<double> F3;
+    //StereoCoupledAllPass<double> F4;
+    //StereoCoupledAllPass<double> F5;
 
-    std::vector<std::unique_ptr<IIRFilter>> A1;
-    std::vector<std::unique_ptr<IIRFilter>> A3;
+    //StereoIIRFilter<double> A10;
+    //StereoIIRFilter<double> A30;
+    //StereoIIRFilter<double> A50;
 
-    std::vector<std::unique_ptr<IIRFilter>> F1;
-    std::vector<std::unique_ptr<IIRFilter>> F1_;
-
-    std::vector<std::unique_ptr<IIRFilter>> F2;
-    std::vector<std::unique_ptr<IIRFilter>> F2_;
-
-    std::vector<std::unique_ptr<IIRFilter>> F3;
-    std::vector<std::unique_ptr<IIRFilter>> F3_;
-
-    std::vector<std::unique_ptr<IIRFilter>> F4;
-    std::vector<std::unique_ptr<IIRFilter>> F4_;
+    //StereoIIRFilter<double> A11;
+    //StereoIIRFilter<double> A21;
+    //StereoIIRFilter<double> A31;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DecoderAudioProcessor)
 };

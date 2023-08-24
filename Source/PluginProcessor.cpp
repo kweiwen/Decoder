@@ -17,7 +17,8 @@ DecoderAudioProcessor::DecoderAudioProcessor()
                       #if ! JucePlugin_IsSynth
                        .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
                       #endif
-                       .withOutput ("Output", juce::AudioChannelSet::create7point0(), true)
+                       .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
+                       //.withOutput ("Output", juce::AudioChannelSet::create7point0(), true)
                      #endif
                        )
 #endif
@@ -42,61 +43,26 @@ DecoderAudioProcessor::DecoderAudioProcessor()
     addParameter(bl3 = new juce::AudioParameterFloat("bl3", "bl3", 0.00f, 1.0f, 1.00f));
     addParameter(bl4 = new juce::AudioParameterFloat("bl4", "bl4", 0.00f, 1.0f, 1.00f));
 
-    //auto b0 = 3.844633506779265e-06;
-    //auto b1 = 7.68926701355853e-06;
-    //auto b2 = 3.844633506779265e-06;
-    //auto a0 = 1.0;
-    //auto a1 = -1.9944464105419266;
-    //auto a2 = 0.9944617890759537;
+    std::vector<double> f1d1{ 1.0, -1.9936459871909999463923668372444808483123779296875, 0.99366138261047354252042396183242090046405792236328125 };
+    std::vector<double> f1d2{ 1.0, -2.9936364418694285660649256897158920764923095703125, 2.98729788498444737143699967418797314167022705078125, -0.99366138261041225820946465319138951599597930908203125 };
+    F1.init(f1d1, f1d2);
+    //F2.init(std::vector<double> { 1.0, -1.973607796148709514483243765425868332386016845703125, 0.97387202264802230633478075105813331902027130126953125 },
+    //        std::vector<double> { 1.0, -2.97344235114248522933166896109469234943389892578125, 2.9473186970317701849353397847153246402740478515625, -0.9738720225766270832679083468974567949771881103515625 });
+    //F3.init(std::vector<double> { 1.0, -1.895426574914740758259767972049303352832794189453125, 0.89949353638218720874419886968098580837249755859375 },
+    //        std::vector<double> { 1.0, -2.89278428755276362238646470359526574611663818359375, 2.79254385729267351479165881755761802196502685546875, -0.8994934687432796227568587710266001522541046142578125 });
+    //F4.init(std::vector<double> { 1.0, -1.59737821583015460191745660267770290374755859375, 0.6537276179548758836546085149166174232959747314453125 },
+    //        std::vector<double> { 1.0, -2.5561124994299166957034685765393078327178955078125, 2.224470430509824847575828243861906230449676513671875, -0.65367591026143345711574283996014855802059173583984375 });
+    //F5.init(std::vector<double> { 1.0, -0.5880176344709477920247309157275594770908355712890625, 0.17603526894189702733939384415862150490283966064453125 },
+    //        std::vector<double> { 1.0, -1.056831276945417119605963307549245655536651611328125, 0.7891444864975742934376512494054622948169708251953125, -0.1548114425068488897441199014792800880968570709228515625 });
 
-    double a1[] = { 0.96779909, -1.93663508,  0.96779909 };
-    double f1[] = { -0.00025922, -0.00051845, -0.00025922 };
-    double f1_[] = { 0.96805831, -1.93611663,  0.96805831 };
-    double denominator1[] = { 1.0, -1.93559818,  0.93663508 };
-
-    double a2[] = { 0.87697646, -1.76908772,  0.87697646 };
-    double f2[] = { -0.0037837, -0.0075674, -0.0037837 };
-    double f2_[] = { 0.88076016, -1.76152032,  0.88076016 };
-    double denominator2[] = { 1.0 , -1.75395293,  0.76908772 };
-
-    double a3[] = { 0.57735027, -1.33333333,  0.57735027 };
-    double f3[] = { -0.0446582, -0.0893164, -0.0446582 };
-    double f3_[] = { 0.62200847, -1.24401694,  0.62200847 };
-    double denominator3[] = { 1.0 , -1.15470054,  0.33333333 };
-
-    double f4[] = { 2.35193153e-10, 9.40772611e-10, 1.41115892e-09, 9.40772611e-10, 2.35193153e-10 };
-    double f4_[] = { 0.98895425, -3.955817,  5.9337255, -3.955817,  0.98895425 };
-    double denominator4[] = { 1.0 , -3.97778581,  5.93360349, -3.93384818,  0.97803051 };
-
-    A1.push_back(std::make_unique<IIRFilter>(a1, denominator1));
-    A1.push_back(std::make_unique<IIRFilter>(a1, denominator1));
-    A11.push_back(std::make_unique<IIRFilter>(a1, denominator1));
-    A11.push_back(std::make_unique<IIRFilter>(a1, denominator1));
-    F1.push_back(std::make_unique<IIRFilter>(f1, denominator1));
-    F1.push_back(std::make_unique<IIRFilter>(f1, denominator1));
-    F1_.push_back(std::make_unique<IIRFilter>(f1_, denominator1));
-    F1_.push_back(std::make_unique<IIRFilter>(f1_, denominator1));
-
-    A21.push_back(std::make_unique<IIRFilter>(a2, denominator2));
-    A21.push_back(std::make_unique<IIRFilter>(a2, denominator2));
-    F2.push_back(std::make_unique<IIRFilter>(f2, denominator2));
-    F2.push_back(std::make_unique<IIRFilter>(f2, denominator2));
-    F2_.push_back(std::make_unique<IIRFilter>(f2_, denominator2));
-    F2_.push_back(std::make_unique<IIRFilter>(f2_, denominator2));
-    
-    A3.push_back(std::make_unique<IIRFilter>(a3, denominator3));
-    A3.push_back(std::make_unique<IIRFilter>(a3, denominator3));
-    A31.push_back(std::make_unique<IIRFilter>(a3, denominator3));
-    A31.push_back(std::make_unique<IIRFilter>(a3, denominator3));
-    F3.push_back(std::make_unique<IIRFilter>(f3, denominator3));
-    F3.push_back(std::make_unique<IIRFilter>(f3, denominator3));
-    F3_.push_back(std::make_unique<IIRFilter>(f3_, denominator3));
-    F3_.push_back(std::make_unique<IIRFilter>(f3_, denominator3));
-
-    F4.push_back(std::make_unique<IIRFilter>(f4, denominator4));
-    F4.push_back(std::make_unique<IIRFilter>(f4, denominator4));
-    F4_.push_back(std::make_unique<IIRFilter>(f4_, denominator4));
-    F4_.push_back(std::make_unique<IIRFilter>(f4_, denominator4));
+    //A10.init(std::vector<double> {0.99366138261047354252042396183242090046405792236328125, -1.9936459871909999463923668372444808483123779296875, 1.0}, std::vector<double> {1.0, -1.9936459871909999463923668372444808483123779296875, 0.99366138261047354252042396183242090046405792236328125});
+    //A11.init(std::vector<double> {0.99366138261047354252042396183242090046405792236328125, -1.9936459871909999463923668372444808483123779296875, 1.0}, std::vector<double> {1.0, -1.9936459871909999463923668372444808483123779296875, 0.99366138261047354252042396183242090046405792236328125});
+    //
+    //A30.init(std::vector<double> {0.89949353638218720874419886968098580837249755859375, -1.895426574914740758259767972049303352832794189453125, 1.0}, std::vector<double> {1.0, -1.895426574914740758259767972049303352832794189453125, 0.89949353638218720874419886968098580837249755859375});
+    //A31.init(std::vector<double> {0.89949353638218720874419886968098580837249755859375, -1.895426574914740758259767972049303352832794189453125, 1.0}, std::vector<double> {1.0, -1.895426574914740758259767972049303352832794189453125, 0.89949353638218720874419886968098580837249755859375});
+    //
+    //A21.init(std::vector<double> {0.97387202264802230633478075105813331902027130126953125, -1.973607796148709514483243765425868332386016845703125, 1.0},  std::vector<double> {1.0, -1.973607796148709514483243765425868332386016845703125, 0.97387202264802230633478075105813331902027130126953125});
+    //A50.init(std::vector<double> {0.17603526894189702733939384415862150490283966064453125, -0.5880176344709477920247309157275594770908355712890625, 1.0}, std::vector<double> {1.0, -0.5880176344709477920247309157275594770908355712890625, 0.17603526894189702733939384415862150490283966064453125});
 }
 
 DecoderAudioProcessor::~DecoderAudioProcessor()
@@ -229,11 +195,11 @@ void DecoderAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     
     auto* outputL = buffer.getWritePointer(0);
     auto* outputR = buffer.getWritePointer(1);
-    auto* outputC = buffer.getWritePointer(2);
-    auto* outputLS = buffer.getWritePointer(3);
-    auto* outputRS = buffer.getWritePointer(4);
-    auto* outputLC = buffer.getWritePointer(5);
-    auto* outputRC = buffer.getWritePointer(6);
+    //auto* outputC = buffer.getWritePointer(2);
+    //auto* outputLS = buffer.getWritePointer(3);
+    //auto* outputRS = buffer.getWritePointer(4);
+    //auto* outputLC = buffer.getWritePointer(5);
+    //auto* outputRC = buffer.getWritePointer(6);
 
 
     inst0.update_coeffs(fc0->get(), getSampleRate());
@@ -247,37 +213,37 @@ void DecoderAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
         auto L = inputL[i];
         auto R = inputR[i];
 
-        // L Channel
-        auto F4L = F4[0]->process_sample(L);
-        auto F4_L = F4_[0]->process_sample(L);
-        
-        auto F2L = F2[0]->process_sample(F4_L);
-        auto F2_L = F2_[0]->process_sample(F4_L);
+        //// L Channel
+        //auto F4L = F4[0]->process_sample(L);
+        //auto F4_L = F4_[0]->process_sample(L);
+        //
+        //auto F2L = F2[0]->process_sample(F4_L);
+        //auto F2_L = F2_[0]->process_sample(F4_L);
 
-        auto A3_L = A3[0]->process_sample(F2L);
-        auto A1_L = A1[0]->process_sample(F2_L);
+        //auto A3_L = A3[0]->process_sample(F2L);
+        //auto A1_L = A1[0]->process_sample(F2_L);
    
-        auto b0L = A11[0]->process_sample(A21[0]->process_sample(A31[0]->process_sample(F4L))) * bl0->get();
-        auto b1L = F1[0]->process_sample(A3_L) * bl1->get();
-        auto b2L = F1_[0]->process_sample(A3_L) * bl2->get();
-        auto b3L = F3[0]->process_sample(A1_L) * bl3->get();
-        auto b4L = F3_[0]->process_sample(A1_L) * bl4->get();
+        //auto b0L = A11[0]->process_sample(A21[0]->process_sample(A31[0]->process_sample(F4L))) * bl0->get();
+        //auto b1L = F1[0]->process_sample(A3_L) * bl1->get();
+        //auto b2L = F1_[0]->process_sample(A3_L) * bl2->get();
+        //auto b3L = F3[0]->process_sample(A1_L) * bl3->get();
+        //auto b4L = F3_[0]->process_sample(A1_L) * bl4->get();
 
-        // R Channel
-        auto F4R = F4[1]->process_sample(R);
-        auto F4_R = F4_[1]->process_sample(R);
+        //// R Channel
+        //auto F4R = F4[1]->process_sample(R);
+        //auto F4_R = F4_[1]->process_sample(R);
 
-        auto F2R = F2[1]->process_sample(F4_R);
-        auto F2_R = F2_[1]->process_sample(F4_R);
+        //auto F2R = F2[1]->process_sample(F4_R);
+        //auto F2_R = F2_[1]->process_sample(F4_R);
 
-        auto A3_R = A3[1]->process_sample(F2R);
-        auto A1_R = A1[1]->process_sample(F2_R);
+        //auto A3_R = A3[1]->process_sample(F2R);
+        //auto A1_R = A1[1]->process_sample(F2_R);
 
-        auto b0R = A11[1]->process_sample(A21[1]->process_sample(A31[1]->process_sample(F4R))) * bl0->get();
-        auto b1R = F1[1]->process_sample(A3_R) * bl1->get();
-        auto b2R = F1_[1]->process_sample(A3_R) * bl2->get();
-        auto b3R = F3[1]->process_sample(A1_R) * bl3->get();
-        auto b4R = F3_[1]->process_sample(A1_R) * bl4->get();
+        //auto b0R = A11[1]->process_sample(A21[1]->process_sample(A31[1]->process_sample(F4R))) * bl0->get();
+        //auto b1R = F1[1]->process_sample(A3_R) * bl1->get();
+        //auto b2R = F1_[1]->process_sample(A3_R) * bl2->get();
+        //auto b3R = F3[1]->process_sample(A1_R) * bl3->get();
+        //auto b4R = F3_[1]->process_sample(A1_R) * bl4->get();
 
         //inst0.process(b0L, b0R);
         //inst1.process(b1L, b1R);
@@ -302,9 +268,15 @@ void DecoderAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
         //outputRC[i] = delayLine_RC * chRC->get();
         //outputLS[i] = delayLine_LS * chLS->get();
         //outputRS[i] = delayLine_RS * chRS->get();
-        outputL[i] = b0L + b1L + b2L + b3L + b4L;
-        outputR[i] = b0R + b1R + b2R + b3R + b4R;
+        //DBG("b0L: " << b0L);
+        //DBG("b1L: " << b1L);
+        //DBG("b2L: " << b2L);
+        //DBG("b3L: " << b3L);
+        //DBG("b4L: " << b4L);
 
+        F1.process_sample(L);
+        outputL[i] = F1.pos;
+        outputR[i] = F1.neg;
     }
 }
 
@@ -339,6 +311,3 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new DecoderAudioProcessor();
 }
-
-
-
