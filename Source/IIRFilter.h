@@ -5,115 +5,99 @@
 #include <iostream>
 
 template <typename T>
-class IIRFilter
+class IIRFilter 
 {
 public:
-    IIRFilter() 
+    IIRFilter() {}
+
+    void init(const std::vector<T>& b, const std::vector<T>& _a) 
     {
-        lenB = 0;
-        lenA = 0;
-        i_b = 0;
-        i_a = 0;
-        filtered = 0;
+        lenB = b.size();
+        lenA = _a.size() - 1;
+
+        x = std::vector<T>(lenB, 0.0);
+        y = std::vector<T>(lenA, 0.0);
+
+        coeff_b = std::vector<T>(2 * lenB - 1, 0.0);
+        coeff_a = std::vector<T>(2 * lenA - 1, 0.0);
+
+        double a0 = _a[0];
+
+        for (uint8_t i = 0; i < 2 * lenB - 1; i++) {
+            coeff_b[i] = b[(2 * lenB - 1 - i) % lenB] / a0;
+        }
+
+        for (uint8_t i = 0; i < 2 * lenA - 1; i++) {
+            coeff_a[i] = _a[1 + (2 * lenA - 2 - i) % lenA] / a0;
+        }
     }
 
-    ~IIRFilter() {}
+    T process_sample(T value) 
+    {
+        x[i_b] = value;
 
-    std::vector<T> coeff_b;
-    std::vector<T> coeff_a;
-    void init(std::vector<T> b, std::vector<T> _a);
-    T process_sample(T value);
-    void process(T* input, T* output, int block_size);
-    T filtered;
+        T b_terms = 0;
+        for (uint8_t i = 0; i < lenB; i++) {
+            b_terms += x[i] * coeff_b[lenB - i_b - 1 + i];
+        }
+
+        T a_terms = 0;
+        for (uint8_t i = 0; i < lenA; i++) {
+            a_terms += y[i] * coeff_a[lenA - i_a - 1 + i];
+        }
+
+        filtered = b_terms - a_terms;
+        y[i_a] = filtered;
+
+        i_b = (i_b + 1) % lenB;
+        i_a = (i_a + 1) % lenA;
+
+        return filtered;
+    }
 
 private:
-    uint8_t lenB, lenA;
-    uint8_t i_b;
-    uint8_t i_a;
+    size_t lenB, lenA;
+    uint8_t i_b = 0, i_a = 0;
+    T filtered;
     std::vector<T> x;
     std::vector<T> y;
+    std::vector<T> coeff_b;
+    std::vector<T> coeff_a;
 };
 
 template <typename T>
-void IIRFilter<T>::init(std::vector<T> b, std::vector<T> _a)
+class StereoIIRFilter
 {
-    // create DF-1 structure
-    i_b = 0;
-    i_a = 0;
+public:
+    StereoIIRFilter() {}
+    ~StereoIIRFilter() {}
 
-    lenB = b.size();
-    lenA = _a.size();
-        
-    x = std::vector<T>(lenB, 0);
-    y = std::vector<T>(lenA, 0);
+    void init(std::vector<T> b, std::vector<T> a);
+    void process_sample(T inputL, T inputR);
 
-    coeff_b = std::vector<T>(2 * lenB - 1, 0);
-    coeff_a = std::vector<T>(2 * lenA - 1, 0);
+    IIRFilter<T> L;
+    IIRFilter<T> R;
+};
 
-    // normalize
-    double a0 = _a[0];
-    const double* a = &_a[1];
-    for (uint8_t i = 0; i < 2 * lenB - 1; i++)
-    {
-        coeff_b[i] = b[(2 * lenB - 1 - i) % lenB] / a0;
-    }
-    for (uint8_t i = 0; i < 2 * lenA - 1; i++)
-    {
-        coeff_a[i] = a[(2 * lenA - 2 - i) % lenA] / a0;
-    }
+template <typename T>
+void StereoIIRFilter<T>::init(std::vector<T> b, std::vector<T> a)
+{
+    L.init(b, a);
+    R.init(b, a);
 }
 
 template <typename T>
-T IIRFilter<T>::process_sample(T value)
+void StereoIIRFilter<T>::process_sample(T inputL, T inputR)
 {
-    x[i_b] = value;
-
-    // moving average
-    T b_terms = 0;
-    for (size_t i = 0; i < lenB; i++)
-    {
-        b_terms += x[i] * coeff_b[lenB - i_b - 1 + i];
-    }
-    
-    // auto regressive
-    T a_terms = 0;
-    for (size_t i = 0; i < lenA; i++)
-    {
-        a_terms += y[i] * coeff_a[lenA - i_a - 1 + i];
-    }
-    
-    filtered = b_terms - a_terms;
-    y[i_a] = filtered;
-    
-    i_b++;
-    if (i_b == lenB)
-    {
-        i_b = 0;
-    }
-    
-    i_a++;
-    if (i_a == lenA)
-    {
-        i_a = 0;
-    }
-    
-    return filtered;
-}
-
-template <typename T>
-void IIRFilter<T>::process(T* input, T* output, int block_size)
-{
-    for (int i = 0; i < block_size; i++)
-    {
-        output[i] = process_sample(input[i]);
-    }
+    L.filtered = L.process_sample(inputL);
+    R.filtered = R.process_sample(inputR);
 }
 
 template <typename T>
 class CoupledAllPass
 {
 public:
-    CoupledAllPass() 
+    CoupledAllPass()
     {
         neg = 0;
         pos = 0;
@@ -150,35 +134,6 @@ void CoupledAllPass<T>::process_sample(T input)
     T A2 = H2.process_sample(input);
     pos = (A1 + A2) * 0.5;
     neg = (A1 - A2) * 0.5;
-}
-
-
-template <typename T>
-class StereoIIRFilter
-{
-public:
-    StereoIIRFilter() {}
-    ~StereoIIRFilter() {}
-
-    void init(std::vector<T> b, std::vector<T> a);
-    void process_sample(T inputL, T inputR);
-
-    IIRFilter<T> L;
-    IIRFilter<T> R;
-};
-
-template <typename T>
-void StereoIIRFilter<T>::init(std::vector<T> b, std::vector<T> a)
-{
-    L.init(b, a);
-    R.init(b, a);
-}
-
-template <typename T>
-void StereoIIRFilter<T>::process_sample(T inputL, T inputR)
-{
-    L.filtered = L.process_sample(inputL);
-    R.filtered = R.process_sample(inputR);
 }
 
 
