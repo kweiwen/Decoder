@@ -86,6 +86,7 @@ private:
     juce::AudioParameterFloat* bl2;
     juce::AudioParameterFloat* bl3;
     juce::AudioParameterFloat* bl4;
+    juce::AudioParameterFloat* bl5;
 
     std::unique_ptr<CircularBuffer<double>> CB_LS;
     std::unique_ptr<CircularBuffer<double>> CB_RS;
@@ -94,17 +95,17 @@ private:
 
     StereoCoupledAllPass<double> F1;
     StereoCoupledAllPass<double> F2;
-    //StereoCoupledAllPass<double> F3;
-    //StereoCoupledAllPass<double> F4;
-    //StereoCoupledAllPass<double> F5;
+    StereoCoupledAllPass<double> F3;
+    StereoCoupledAllPass<double> F4;
+    StereoCoupledAllPass<double> F5;
 
-    //StereoIIRFilter<double> A10;
-    //StereoIIRFilter<double> A30;
-    //StereoIIRFilter<double> A50;
+    StereoAllPass<double> A10;
+    StereoAllPass<double> A30;
+    StereoAllPass<double> A50;
 
-    //StereoIIRFilter<double> A11;
-    //StereoIIRFilter<double> A21;
-    //StereoIIRFilter<double> A31;
+    StereoAllPass<double> A11;
+    StereoAllPass<double> A21;
+    StereoAllPass<double> A31;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DecoderAudioProcessor)
 };

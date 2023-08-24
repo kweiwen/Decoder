@@ -55,10 +55,11 @@ public:
         return filtered;
     }
 
+    T filtered = 0;
+
 private:
-    size_t lenB, lenA;
+    size_t lenB = 0, lenA = 0;
     uint8_t i_b = 0, i_a = 0;
-    T filtered;
     std::vector<T> x;
     std::vector<T> y;
     std::vector<T> coeff_b;
@@ -160,6 +161,36 @@ void StereoCoupledAllPass<T>::init(std::vector<T> d1, std::vector<T> d2)
 
 template <typename T>
 void StereoCoupledAllPass<T>::process_sample(T inputL, T inputR)
+{
+    L.process_sample(inputL);
+    R.process_sample(inputR);
+}
+
+template <typename T>
+class StereoAllPass
+{
+public:
+    StereoAllPass() {}
+    ~StereoAllPass() {}
+
+    void init(std::vector<T> d1);
+    void process_sample(T inputL, T inputR);
+
+    IIRFilter<T> L;
+    IIRFilter<T> R;
+};
+
+template <typename T>
+void StereoAllPass<T>::init(std::vector<T> d1)
+{
+    std::vector<T> d1_(d1.size());
+    std::reverse_copy(std::begin(d1), std::end(d1), std::begin(d1_));
+    L.init(d1_, d1);
+    R.init(d1_, d1);
+}
+
+template <typename T>
+void StereoAllPass<T>::process_sample(T inputL, T inputR)
 {
     L.process_sample(inputL);
     R.process_sample(inputR);
