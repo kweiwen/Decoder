@@ -92,8 +92,8 @@ private:
     std::unique_ptr<CircularBuffer<double>> CB_LC;
     std::unique_ptr<CircularBuffer<double>> CB_RC;
 
-    CoupledAllPass<double> F1;
-    CoupledAllPass<double> F2;
+    StereoCoupledAllPass<double> F1;
+    StereoCoupledAllPass<double> F2;
     //StereoCoupledAllPass<double> F3;
     //StereoCoupledAllPass<double> F4;
     //StereoCoupledAllPass<double> F5;

@@ -277,10 +277,10 @@ void DecoderAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
         //DBG("b3L: " << b3L);
         //DBG("b4L: " << b4L);
 
-        F1.process_sample(L);
-        F2.process_sample(L);
-        outputL[i] = F1.neg;
-        outputR[i] = F2.neg;
+        F1.process_sample(L, R);
+        F2.process_sample(L, R);
+        outputL[i] = F1.L.pos;
+        outputR[i] = F2.R.pos;
     }
 }
 
