@@ -64,6 +64,7 @@ private:
     surround inst2;
     surround inst3;
     surround inst4;
+    surround inst5;
 
     juce::AudioParameterFloat* chLC;
     juce::AudioParameterFloat* chRC;
@@ -75,18 +76,19 @@ private:
     juce::AudioParameterFloat* delayTimeSR;
     juce::AudioParameterFloat* delayTime;
 
-    juce::AudioParameterFloat* fc0;
-    juce::AudioParameterFloat* fc1;
-    juce::AudioParameterFloat* fc2;
-    juce::AudioParameterFloat* fc3;
-    juce::AudioParameterFloat* fc4;
+    juce::AudioParameterFloat* pf0;
+    juce::AudioParameterFloat* pf1;
+    juce::AudioParameterFloat* pf2;
+    juce::AudioParameterFloat* pf3;
+    juce::AudioParameterFloat* pf4;
+    juce::AudioParameterFloat* pf5;
 
-    juce::AudioParameterFloat* bl0;
-    juce::AudioParameterFloat* bl1;
-    juce::AudioParameterFloat* bl2;
-    juce::AudioParameterFloat* bl3;
-    juce::AudioParameterFloat* bl4;
-    juce::AudioParameterFloat* bl5;
+    juce::AudioParameterFloat* band0_level;
+    juce::AudioParameterFloat* band1_level;
+    juce::AudioParameterFloat* band2_level;
+    juce::AudioParameterFloat* band3_level;
+    juce::AudioParameterFloat* band4_level;
+    juce::AudioParameterFloat* band5_level;
 
     std::unique_ptr<CircularBuffer<double>> CB_LS;
     std::unique_ptr<CircularBuffer<double>> CB_RS;

@@ -17,32 +17,32 @@ DecoderAudioProcessor::DecoderAudioProcessor()
                       #if ! JucePlugin_IsSynth
                        .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
                       #endif
-                       .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
-                       //.withOutput ("Output", juce::AudioChannelSet::create7point0(), true)
+                       .withOutput ("Output", juce::AudioChannelSet::create7point0(), true)
                      #endif
                        )
 #endif
 {
     addParameter(delayTimeSR = new juce::AudioParameterFloat("timeSR", "timeSR", 1.00f, 2048.00f, 2048.00f));
     addParameter(delayTime   = new juce::AudioParameterFloat("time", "time", 1.00f, 1024.00f, 1024.00f));
-    addParameter(chL = new juce::AudioParameterFloat("chL", "chL", 0.00f, 1.00f, 0.50f));
-    addParameter(chR = new juce::AudioParameterFloat("chR", "chR", 0.00f, 1.00f, 0.50f));
-    addParameter(chC = new juce::AudioParameterFloat("chC", "chC", 0.00f, 1.00f, 0.50f));
-    addParameter(chLC = new juce::AudioParameterFloat("chLC", "chLC", 0.00f, 1.00f, 0.50f));
-    addParameter(chRC = new juce::AudioParameterFloat("chRC", "chRC", 0.00f, 1.00f, 0.50f));
-    addParameter(chLS = new juce::AudioParameterFloat("chLS", "chLS", 0.00f, 4.00f, 4.00f));
-    addParameter(chRS = new juce::AudioParameterFloat("chRS", "chRS", 0.00f, 4.00f, 4.00f));
-    addParameter(fc0 = new juce::AudioParameterFloat("fc0", "fc0", 5.0f, 120.0f, 90.00f));
-    addParameter(fc1 = new juce::AudioParameterFloat("fc1", "fc1", 5.0f, 120.0f, 90.00f));
-    addParameter(fc2 = new juce::AudioParameterFloat("fc2", "fc2", 5.0f, 120.0f, 90.00f));
-    addParameter(fc3 = new juce::AudioParameterFloat("fc3", "fc3", 5.0f, 120.0f, 90.00f));
-    addParameter(fc4 = new juce::AudioParameterFloat("fc4", "fc4", 5.0f, 120.0f, 90.00f));
-    addParameter(bl0 = new juce::AudioParameterFloat("bl0", "bl0", 0.00f, 1.0f, 1.00f));
-    addParameter(bl1 = new juce::AudioParameterFloat("bl1", "bl1", 0.00f, 1.0f, 1.00f));
-    addParameter(bl2 = new juce::AudioParameterFloat("bl2", "bl2", 0.00f, 1.0f, 1.00f));
-    addParameter(bl3 = new juce::AudioParameterFloat("bl3", "bl3", 0.00f, 1.0f, 1.00f));
-    addParameter(bl4 = new juce::AudioParameterFloat("bl4", "bl4", 0.00f, 1.0f, 1.00f));
-    addParameter(bl5 = new juce::AudioParameterFloat("bl5", "bl5", 0.00f, 1.0f, 1.00f));
+    addParameter(chL = new juce::AudioParameterFloat("L", "L", 0.00f, 1.00f, 0.50f));
+    addParameter(chR = new juce::AudioParameterFloat("R", "R", 0.00f, 1.00f, 0.50f));
+    addParameter(chC = new juce::AudioParameterFloat("C", "C", 0.00f, 1.00f, 0.50f));
+    addParameter(chLC = new juce::AudioParameterFloat("LC", "LC", 0.00f, 1.00f, 0.50f));
+    addParameter(chRC = new juce::AudioParameterFloat("RC", "RC", 0.00f, 1.00f, 0.50f));
+    addParameter(chLS = new juce::AudioParameterFloat("LS", "LS", 0.00f, 4.00f, 4.00f));
+    addParameter(chRS = new juce::AudioParameterFloat("RS", "RS", 0.00f, 4.00f, 4.00f));
+    addParameter(pf0 = new juce::AudioParameterFloat("panning0_factor", "panning0_factor", 15.0f, 120.0f, 90.00f));
+    addParameter(pf1 = new juce::AudioParameterFloat("panning1_factor", "panning1_factor", 15.0f, 120.0f, 90.00f));
+    addParameter(pf2 = new juce::AudioParameterFloat("panning2_factor", "panning2_factor", 15.0f, 120.0f, 90.00f));
+    addParameter(pf3 = new juce::AudioParameterFloat("panning3_factor", "panning3_factor", 15.0f, 120.0f, 90.00f));
+    addParameter(pf4 = new juce::AudioParameterFloat("panning4_factor", "panning4_factor", 15.0f, 120.0f, 90.00f));
+    addParameter(pf5 = new juce::AudioParameterFloat("panning5_factor", "panning5_factor", 15.0f, 120.0f, 90.00f));
+    addParameter(band0_level = new juce::AudioParameterFloat("band0_level", "band0_level", 0.00f, 1.0f, 1.00f));
+    addParameter(band1_level = new juce::AudioParameterFloat("band1_level", "band1_level", 0.00f, 1.0f, 1.00f));
+    addParameter(band2_level = new juce::AudioParameterFloat("band2_level", "band2_level", 0.00f, 1.0f, 1.00f));
+    addParameter(band3_level = new juce::AudioParameterFloat("band3_level", "band3_level", 0.00f, 1.0f, 1.00f));
+    addParameter(band4_level = new juce::AudioParameterFloat("band4_level", "band4_level", 0.00f, 1.0f, 1.00f));
+    addParameter(band5_level = new juce::AudioParameterFloat("band5_level", "band5_level", 0.00f, 1.0f, 1.00f));
 }
 
 DecoderAudioProcessor::~DecoderAudioProcessor()
@@ -200,101 +200,63 @@ void DecoderAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     
     auto* outputL = buffer.getWritePointer(0);
     auto* outputR = buffer.getWritePointer(1);
-    //auto* outputC = buffer.getWritePointer(2);
-    //auto* outputLS = buffer.getWritePointer(3);
-    //auto* outputRS = buffer.getWritePointer(4);
-    //auto* outputLC = buffer.getWritePointer(5);
-    //auto* outputRC = buffer.getWritePointer(6);
+    auto* outputC = buffer.getWritePointer(2);
+    auto* outputLS = buffer.getWritePointer(3);
+    auto* outputRS = buffer.getWritePointer(4);
+    auto* outputLC = buffer.getWritePointer(5);
+    auto* outputRC = buffer.getWritePointer(6);
 
 
-    inst0.update_coeffs(fc0->get(), getSampleRate());
-    inst1.update_coeffs(fc1->get(), getSampleRate());
-    inst2.update_coeffs(fc2->get(), getSampleRate());
-    inst3.update_coeffs(fc3->get(), getSampleRate());
-    inst4.update_coeffs(fc4->get(), getSampleRate());
+    inst0.update_coeffs(pf0->get(), getSampleRate());
+    inst1.update_coeffs(pf1->get(), getSampleRate());
+    inst2.update_coeffs(pf2->get(), getSampleRate());
+    inst3.update_coeffs(pf3->get(), getSampleRate());
+    inst4.update_coeffs(pf4->get(), getSampleRate());
+    inst5.update_coeffs(pf5->get(), getSampleRate());
 
     for (int i = 0; i < blockSize; i++)
     {
         double L = inputL[i];
         double R = inputR[i];
 
-        //// L Channel
-        //auto F4L = F4[0]->process_sample(L);
-        //auto F4_L = F4_[0]->process_sample(L);
-        //
-        //auto F2L = F2[0]->process_sample(F4_L);
-        //auto F2_L = F2_[0]->process_sample(F4_L);
-
-        //auto A3_L = A3[0]->process_sample(F2L);
-        //auto A1_L = A1[0]->process_sample(F2_L);
-   
-        //auto b0L = A11[0]->process_sample(A21[0]->process_sample(A31[0]->process_sample(F4L))) * bl0->get();
-        //auto b1L = F1[0]->process_sample(A3_L) * bl1->get();
-        //auto b2L = F1_[0]->process_sample(A3_L) * bl2->get();
-        //auto b3L = F3[0]->process_sample(A1_L) * bl3->get();
-        //auto b4L = F3_[0]->process_sample(A1_L) * bl4->get();
-
-        //// R Channel
-        //auto F4R = F4[1]->process_sample(R);
-        //auto F4_R = F4_[1]->process_sample(R);
-
-        //auto F2R = F2[1]->process_sample(F4_R);
-        //auto F2_R = F2_[1]->process_sample(F4_R);
-
-        //auto A3_R = A3[1]->process_sample(F2R);
-        //auto A1_R = A1[1]->process_sample(F2_R);
-
-        //auto b0R = A11[1]->process_sample(A21[1]->process_sample(A31[1]->process_sample(F4R))) * bl0->get();
-        //auto b1R = F1[1]->process_sample(A3_R) * bl1->get();
-        //auto b2R = F1_[1]->process_sample(A3_R) * bl2->get();
-        //auto b3R = F3[1]->process_sample(A1_R) * bl3->get();
-        //auto b4R = F3_[1]->process_sample(A1_R) * bl4->get();
-
-        //inst0.process(b0L, b0R);
-        //inst1.process(b1L, b1R);
-        //inst2.process(b2L, b2R);
-        //inst3.process(b3L, b3R);
-        //inst4.process(b4L, b4R);
-
-        //auto delayLine_LS = CB_LS->readBuffer(delayTimeSR->get(), false);
-        //auto delayLine_RS = CB_RS->readBuffer(delayTimeSR->get(), false);
-        //auto delayLine_LC = CB_LC->readBuffer(delayTime->get(), false);
-        //auto delayLine_RC = CB_RC->readBuffer(delayTime->get(), false);
-
-        //CB_LS->writeBuffer((inst0.LS + inst1.LS + inst2.LS + inst3.LS + inst4.LS));
-        //CB_RS->writeBuffer((inst0.RS + inst1.RS + inst2.RS + inst3.RS + inst4.RS));
-        //CB_LC->writeBuffer((inst0.LC + inst1.LC + inst2.LC + inst3.LC + inst4.LC));
-        //CB_RC->writeBuffer((inst0.RC + inst1.RC + inst2.RC + inst3.RC + inst4.RC));
-        
-        //outputL[i] = inputL[i] * chL->get();
-        //outputR[i] = inputR[i] * chR->get();
-        //outputC[i] = (inst0.C + inst1.C + inst2.C + inst3.C + inst4.C) * chC->get();
-        //outputLC[i] = delayLine_LC * chLC->get();
-        //outputRC[i] = delayLine_RC * chRC->get();
-        //outputLS[i] = delayLine_LS * chLS->get();
-        //outputRS[i] = delayLine_RS * chRS->get();
-        //DBG("b0L: " << b0L);
-        //DBG("b1L: " << b1L);
-        //DBG("b2L: " << b2L);
-        //DBG("b3L: " << b3L);
-        //DBG("b4L: " << b4L);
-
+        // Complementary AllPass
         F4.process_sample(L, R);
-        
         A50.process_sample(F4.L.pos, F4.R.pos);
         F2.process_sample(A50.L.filtered, A50.R.filtered);
         A30.process_sample(F2.L.pos, F2.R.pos);
-        A10.process_sample(F2.L.neg, F2.R.neg);
         F1.process_sample(A30.L.filtered, A30.R.filtered);
+        A10.process_sample(F2.L.neg, F2.R.neg);
         F3.process_sample(A10.L.filtered, A10.R.filtered);
-
         A11.process_sample(F4.L.neg, F4.R.neg);
         A21.process_sample(A11.L.filtered, A11.R.filtered);
         A31.process_sample(A21.L.filtered, A21.R.filtered);
         F5.process_sample(A31.L.filtered, A31.R.filtered);
 
-        outputL[i] = F1.L.pos * bl0->get() + F1.L.neg * bl1->get() + F3.L.pos * bl2->get() + F3.L.neg * bl3->get() + F4.L.pos * bl4->get() + F4.L.neg * bl5->get();
-        outputR[i] = F1.R.pos * bl0->get() + F1.R.neg * bl1->get() + F3.R.pos * bl2->get() + F3.R.neg * bl3->get() + F4.R.pos * bl4->get() + F4.R.neg * bl5->get();
+        // decoder
+        inst0.process(F1.L.pos * band0_level->get(), F1.R.pos * band0_level->get());
+        inst1.process(F1.L.neg * band1_level->get(), F1.R.neg * band1_level->get());
+        inst2.process(F3.L.pos * band2_level->get(), F3.R.pos * band2_level->get());
+        inst3.process(F3.L.neg * band3_level->get(), F3.R.neg * band3_level->get());
+        inst4.process(F5.L.pos * band4_level->get(), F5.R.pos * band4_level->get());
+        inst5.process(F5.L.neg * band5_level->get(), F5.R.neg * band5_level->get());
+
+        auto delayLine_LS = CB_LS->readBuffer(delayTimeSR->get(), false);
+        auto delayLine_RS = CB_RS->readBuffer(delayTimeSR->get(), false);
+        auto delayLine_LC = CB_LC->readBuffer(delayTime->get(), false);
+        auto delayLine_RC = CB_RC->readBuffer(delayTime->get(), false);
+
+        CB_LS->writeBuffer((inst0.LS + inst1.LS + inst2.LS + inst3.LS + inst4.LS + inst5.LS));
+        CB_RS->writeBuffer((inst0.RS + inst1.RS + inst2.RS + inst3.RS + inst4.RS + inst5.RS));
+        CB_LC->writeBuffer((inst0.LC + inst1.LC + inst2.LC + inst3.LC + inst4.LC + inst5.LC));
+        CB_RC->writeBuffer((inst0.RC + inst1.RC + inst2.RC + inst3.RC + inst4.RC + inst5.RC));
+
+        outputL[i] = inputL[i] * chL->get();
+        outputR[i] = inputR[i] * chR->get();
+        outputC[i] = (inst0.C + inst1.C + inst2.C + inst3.C + inst4.C) * chC->get();
+        outputLC[i] = delayLine_LC * chLC->get();
+        outputRC[i] = delayLine_RC * chRC->get();
+        outputLS[i] = delayLine_LS * chLS->get();
+        outputRS[i] = delayLine_RS * chRS->get();
     }
 }
 
