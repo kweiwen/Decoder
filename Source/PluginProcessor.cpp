@@ -250,13 +250,14 @@ void DecoderAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
         CB_LC->writeBuffer((inst0.LC + inst1.LC + inst2.LC + inst3.LC + inst4.LC + inst5.LC));
         CB_RC->writeBuffer((inst0.RC + inst1.RC + inst2.RC + inst3.RC + inst4.RC + inst5.RC));
 
+
         outputL[i] = inputL[i] * chL->get();
         outputR[i] = inputR[i] * chR->get();
         outputC[i] = (inst0.C + inst1.C + inst2.C + inst3.C + inst4.C) * chC->get();
-        outputLC[i] = delayLine_LC * chLC->get();
-        outputRC[i] = delayLine_RC * chRC->get();
-        outputLS[i] = delayLine_LS * chLS->get();
-        outputRS[i] = delayLine_RS * chRS->get();
+        outputLS[i] = inst0.LS * chLS->get();
+        outputRS[i] = inst0.RS * chRS->get();
+        outputLC[i] = inst0.LC * chLC->get();
+        outputRC[i] = inst0.RC * chRC->get();
     }
 }
 
